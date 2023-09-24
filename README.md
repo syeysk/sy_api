@@ -6,7 +6,7 @@
 - `pip install git+https://github.com/syeysk/sy_api.git`
 
 Для доступа к микросервисам необходим токен, получить который можно на странице "Токены для API":
-<p align="center"><img src="getting_token_item.png" align="middle"></p>
+<p align="center"><img src="getting_token_item.png" align="middle" width="50%"></p>
 
 Пример кода:
 ```python
@@ -18,9 +18,11 @@ note = Note(token)
 title = 'Заметка для теста'
 content = 'а это её содержимое))'
 note.create(title, content)
+print(note.get(title))
 new_title = 'Заметка для теста (обновлён заголовок)'
 note.update(title, new_title=new_title)
 note.update(new_title, new_content='ну вот и содержимое обновилось')
+print(note.get(new_title))
 note.delete(new_title)
 ```
 

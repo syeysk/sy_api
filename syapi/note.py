@@ -17,7 +17,8 @@ class Note:
         self.token = f'Bearer {token}'
         self.version = version
         self.default_source = None
-        self.root_url = f'{URL_MICROSERVICE_NOTE}/api/v{self.version}/note'
+        self.url_microservice_note = URL_MICROSERVICE_NOTE
+        self.root_url = f'{self.url_microservice_note}/api/v{self.version}/note'
 
     def request(self, http_method, path, *args, **kwargs):
         headers = kwargs.setdefault('headers', {})
