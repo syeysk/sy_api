@@ -18,7 +18,10 @@ class Note:
         self.version = version
         self.default_source = None
         self.url_microservice_note = URL_MICROSERVICE_NOTE
-        self.root_url = f'{self.url_microservice_note}/api/v{self.version}/note'
+
+    @property
+    def root_url(self):
+        return f'{self.url_microservice_note}/api/v{self.version}/note'
 
     def request(self, http_method, path, *args, **kwargs):
         headers = kwargs.setdefault('headers', {})
