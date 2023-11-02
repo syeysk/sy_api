@@ -1,4 +1,6 @@
 import json
+from secrets import token_urlsafe
+from random import randint
 
 import requests
 from syapi.constants import URL_MICROSERVICE_AUTH
@@ -70,7 +72,7 @@ class User:
             dict_data['microservice_auth_id'] = self.microservice_auth_id
 
         dict_data['public_key'] = dumps_public_key(self._public_key)
-        dict_data['random_trash'] = ' me ejerkvke l;me '  # TODO: сделать
+        dict_data['random_trash'] = token_urlsafe(randint(5, 20))
         kwargs['json'] = {
             'data': encrypt(json.dumps(dict_data).encode(), self._auth_public_key),
         }
@@ -107,7 +109,7 @@ class User:
 
     def registrate(self, username, password, email, first_name='', last_name=''):
         fields = {
-            'username':username,
+            'username': username,
             'password': password,
             'email': email,
             'first_name': first_name,
@@ -115,7 +117,28 @@ class User:
         }
         response = self.request('post', '/registrate/', True, json=fields)
         if response.status_code == 200:
-            return self._decrypt(response)
+            decrypt_data = self._decrypt(response)
+            self.token = decrypt_data.pop('token')
+            self.microservice_auth_id = decrypt_data['microservice_auth_id']
+            return decrypt_data
+
+        raise UnknownException(response.status_code)
+
+    def login_or_registrate_by_extern(self, username, email, extern_id, old_token, first_name='', last_name=''):
+        fields = {
+            'username': username,
+            'extern_id': extern_id,
+            'email': email,
+            'first_name': first_name,
+            'last_name': last_name,
+            'old_token': old_token,
+        }
+        response = self.request('post', '/login_or_registrate_by_extern/', True, json=fields)
+        if response.status_code == 200:
+            decrypt_data = self._decrypt(response)
+            self.token = decrypt_data.pop('token')
+            self.microservice_auth_id = decrypt_data['microservice_auth_id']
+            return decrypt_data
 
         raise UnknownException(response.status_code)
 
