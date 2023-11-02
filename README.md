@@ -10,6 +10,8 @@
 
 Для каждого микросервиса - отдельный токен.
 
+## Микросервис заметок
+
 Пример кода:
 ```python
 from syapi.note import Note
@@ -42,6 +44,43 @@ note.delete(new_title)
   то будет использована база, являющая по-умолчанию на сервере.
 - `Note.url_microservice_note` - URL микросервиса заметок. По-умолчанию - `https://cachebrain.fun`.
   Переопределив это свойство, можно, например, делать запросы к локальной копии микросервиса.
+
+## Микросервис авторизации
+
+```python
+from syapi.auth import User
+```
+
+Для получения доступа есть несколько способов.
+
+Ручная авторизация:
+```python
+user = User()
+# через имя пользователя и пароль
+userdata = user.login(username, password)
+# через регистрацию
+userdata = user.registrate(username, password, email)
+# через внешний сервис авторизации
+userdata = user.login_or_registrate_by_extern()
+```
+
+Во всех трёх способах методы возвращают `userdata`, содержат поле `token` - токен, который используется для доступа к управлению пользователем.
+Токен имеет срок жизни.
+
+Если вы авторизовались ранее и сохранили токен и ключи, то получить доступ можно сразу:
+```python
+user = User(token, microservice_auth_id, auth_public_key, private_key, public_key)
+```
+
+После чего, можно управлять пользователем:
+```python
+# получить информацию о пользователе
+user_data = user.get()
+# редактировать информацию о пользователе
+changed_fields = user.put(first_name='new first name')
+# удалить пользователя
+user_data = user.delete()
+```
 
 ## План разработки библиотеки
 

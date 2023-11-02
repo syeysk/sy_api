@@ -13,11 +13,11 @@ from syapi.exceptions import (
 
 
 class Note:
-    def __init__(self, token: str, version: str | int = 1):
+    def __init__(self, token: str, version: str | int = 1, url=None):
         self.token = f'Bearer {token}'
         self.version = version
         self.default_source = None
-        self.url_microservice_note = URL_MICROSERVICE_NOTE
+        self.url_microservice_note = url or URL_MICROSERVICE_NOTE
 
     @property
     def root_url(self):

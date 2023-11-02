@@ -5,6 +5,14 @@ class FieldsException(Exception):
         self.errors = errors
 
 
+class NotAuthorizedException(Exception):
+    status_code = 401
+
+
+class AccessDeniedException(Exception):
+    status_code = 403
+
+
 class ObjectNotFoundException(Exception):
     status_code = 404
 
