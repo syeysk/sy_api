@@ -83,4 +83,4 @@ def decrypt(encoded_base64: str, private_key) -> str:
         portions.append(decrypted_portion.decode())
         portion = encoded_bytes[portion_size * len(portions):portion_size * (len(portions) + 1)]
 
-    return ''.join(portions)
+    return b''.join(portions).decode()
