@@ -5,6 +5,7 @@ from random import randint
 import requests
 from syapi.constants import URL_MICROSERVICE_AUTH
 from syapi.exceptions import (
+    AccessDeniedException,
     AlreadyExistsException,
     FieldsException,
     ObjectNotFoundException,
@@ -83,11 +84,14 @@ class User:
         if response.status_code == 500:
             raise ServerException(response.content)
 
+        if response.status_code == 403:
+            raise AccessDeniedException(self._decrypt(response)['detail'])
+
         if response.status_code == 404:
-            raise ObjectNotFoundException(response.json()['detail'])
+            raise ObjectNotFoundException(self._decrypt(response)['detail'])
 
         if response.status_code == 422:
-            raise AlreadyExistsException(response.json()['detail'])
+            raise AlreadyExistsException(self._decrypt(response)['detail'])
 
         return response
 
