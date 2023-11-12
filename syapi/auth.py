@@ -45,7 +45,7 @@ class User:
 
         self.url_microservice_auth = url or URL_MICROSERVICE_AUTH
         if auth_public_key is None:
-            self._auth_public_key = self._get_auth_public_key()
+            self._auth_public_key = self.get_auth_public_key()
         else:
             self._auth_public_key = load_public_key(auth_public_key)
 
@@ -53,7 +53,7 @@ class User:
     def root_url(self):
         return f'{self.url_microservice_auth}/api/v{self.version}/auth'
 
-    def _get_auth_public_key(self):
+    def get_auth_public_key(self):
         response = requests.get(f'{self.root_url}/public_key/')
         return load_public_key(response.json()['public_key'].encode())
 
@@ -128,7 +128,7 @@ class User:
 
         raise UnknownException(response.status_code)
 
-    def login_or_registrate_by_extern(self, username, email, extern_id, old_token, first_name='', last_name=''):
+    def login_or_registrate_by_extern_old(self, username, email, extern_id, old_token, first_name='', last_name=''):
         fields = {
             'username': username,
             'extern_id': extern_id,
@@ -136,6 +136,21 @@ class User:
             'first_name': first_name,
             'last_name': last_name,
             'old_token': old_token,
+        }
+        response = self.request('post', '/login_or_registrate_by_extern/', True, json=fields)
+        if response.status_code == 200:
+            decrypt_data = self._decrypt(response)
+            self.token = decrypt_data.pop('token')
+            self.microservice_auth_id = decrypt_data['microservice_auth_id']
+            return decrypt_data
+
+        raise UnknownException(response.status_code)
+
+    def login_or_registrate_by_extern(self, extern_service, extern_token, extra=None):
+        fields = {
+            'extern_service': extern_service,
+            'extern_token': extern_token,
+            'extra': extra or {},
         }
         response = self.request('post', '/login_or_registrate_by_extern/', True, json=fields)
         if response.status_code == 200:
