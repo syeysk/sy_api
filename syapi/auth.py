@@ -3,6 +3,7 @@ from secrets import token_urlsafe
 from random import randint
 
 import requests
+
 from syapi.constants import URL_MICROSERVICE_AUTH
 from syapi.exceptions import (
     AccessDeniedException,
@@ -24,6 +25,8 @@ from syapi.utils import (
 
 
 class User:
+    entity_code = 'user'
+
     def __init__(
         self,
         token: str = None,
@@ -43,7 +46,7 @@ class User:
             self._public_key = load_public_key(public_key)
             self._private_key = load_private_key(private_key)
 
-        self.url_microservice_auth = url or URL_MICROSERVICE_AUTH
+        self.url_microservice = url or URL_MICROSERVICE_AUTH
         if auth_public_key is None:
             self._auth_public_key = self.get_auth_public_key()
         else:
@@ -51,7 +54,7 @@ class User:
 
     @property
     def root_url(self):
-        return f'{self.url_microservice_auth}/api/v{self.version}/auth'
+        return f'{self.url_microservice}/api/v{self.version}/auth'
 
     def get_auth_public_key(self):
         response = requests.get(f'{self.root_url}/public_key/')

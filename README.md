@@ -12,7 +12,7 @@
 
 ## Микросервис заметок
 
-Пример кода:
+Пример:
 ```python
 from syapi.note import Note
 
@@ -42,7 +42,7 @@ note.delete(new_title)
 Свойства класса `Note`:
 - `Note.default_source` - идентификатор базы по-умолчанию. Если равно `None` (по-умолчанию),
   то будет использована база, являющая по-умолчанию на сервере.
-- `Note.url_microservice_note` - URL микросервиса заметок. По-умолчанию - `https://cachebrain.fun`.
+- `Note.url_microservice` - URL микросервиса заметок. По-умолчанию - `https://cachebrain.fun`.
   Переопределив это свойство, можно, например, делать запросы к локальной копии микросервиса.
 
 ## Микросервис авторизации
@@ -101,6 +101,24 @@ user_data = user.get()
 changed_fields = user.put(first_name='new first name')
 # удалить пользователя
 user_data = user.delete()
+```
+
+## Микросервис ресурсов
+
+Пример:
+```python
+from syapi.fabric import Fabric
+
+token = 'here-your-token'
+fabric = Fabric(token)
+
+fabric_data = fabric.create(title='My test fabric')
+print(fabric.get(fabric_data['id']))
+```
+
+Выведет:
+```json
+{"id": 1, "title": "My test fabric"}
 ```
 
 ## План разработки библиотеки

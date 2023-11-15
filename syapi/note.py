@@ -1,45 +1,19 @@
 from urllib.parse import quote
 
-import requests
-
+from syapi.base import BaseEntity
 from syapi.constants import URL_MICROSERVICE_NOTE
 from syapi.exceptions import (
-    AlreadyExistsException,
-    FieldsException,
-    ObjectNotFoundException,
-    ServerException,
     UnknownException,
 )
 
 
-class Note:
-    def __init__(self, token: str, version: str | int = 1, url=None):
-        self.token = f'Bearer {token}'
-        self.version = version
+class Note(BaseEntity):
+    DEFAULT_URL_MICROSERVICE = URL_MICROSERVICE_NOTE
+    entity_code = 'note'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.default_source = None
-        self.url_microservice_note = url or URL_MICROSERVICE_NOTE
-
-    @property
-    def root_url(self):
-        return f'{self.url_microservice_note}/api/v{self.version}/note'
-
-    def request(self, http_method, path, *args, **kwargs):
-        headers = kwargs.setdefault('headers', {})
-        headers.setdefault('Authorization', self.token)
-        response = getattr(requests, http_method)(f'{self.root_url}{path}', *args, **kwargs)
-        if response.status_code == 400:
-            raise FieldsException(response.json())
-
-        if response.status_code == 500:
-            raise ServerException(response.content)
-
-        if response.status_code == 404:
-            raise ObjectNotFoundException(response.json()['detail'])
-
-        if response.status_code == 422:
-            raise AlreadyExistsException(response.json()['detail'])
-
-        return response
 
     def get(self, title: str, source: str = None):
         """
