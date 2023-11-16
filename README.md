@@ -14,7 +14,7 @@
 
 Пример:
 ```python
-from syapi.note import Note
+from syapi import Note
 
 token = 'here-your-token'
 note = Note(token)
@@ -49,7 +49,7 @@ note.delete(new_title)
 
 Импорт класса пользователя:
 ```python
-from syapi.auth import User
+from syapi import User
 ```
 
 Для получения доступа есть 3 метода:
@@ -107,7 +107,7 @@ user_data = user.delete()
 
 Пример:
 ```python
-from syapi.fabric import Fabric
+from syapi import Fabric
 
 token = 'here-your-token'
 fabric = Fabric(token)
