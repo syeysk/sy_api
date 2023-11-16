@@ -34,7 +34,8 @@ class Resource(BaseEntity):
         """
         Get a resource.
         :param resource_id: a resource's id
-        :return: {"id": "integer", "title": "string", "status": integer, "fabric_maker": integer} or raise an exception
+        :return: {"id": "integer", "title": "string", "status": "integer", "fabric_maker": "integer"}
+         or raise an exception
         """
         response = self.request('get', f'/{resource_id}', json={})
         if response.status_code == 200:
