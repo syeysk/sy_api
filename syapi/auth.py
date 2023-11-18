@@ -131,24 +131,6 @@ class User:
 
         raise UnknownException(response.status_code)
 
-    def login_or_registrate_by_extern_old(self, username, email, extern_id, old_token, first_name='', last_name=''):
-        fields = {
-            'username': username,
-            'extern_id': extern_id,
-            'email': email,
-            'first_name': first_name,
-            'last_name': last_name,
-            'old_token': old_token,
-        }
-        response = self.request('post', '/login_or_registrate_by_extern/', True, json=fields)
-        if response.status_code == 200:
-            decrypt_data = self._decrypt(response)
-            self.token = decrypt_data.pop('token')
-            self.microservice_auth_id = decrypt_data['microservice_auth_id']
-            return decrypt_data
-
-        raise UnknownException(response.status_code)
-
     def login_or_registrate_by_extern(self, extern_service, extern_token, extra=None):
         fields = {
             'extern_service': extern_service,
