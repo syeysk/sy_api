@@ -15,10 +15,10 @@ class BaseEntity:
 
     def __init__(self, token: str, version: str | int = 1, url: str = None):
         if self.DEFAULT_URL_MICROSERVICE is None:
-            raise Exception('You must set "DEFAULT_URL_MICROSERVICE" constant.')
+            raise Exception('You need to set "DEFAULT_URL_MICROSERVICE" constant.')
 
         if self.entity_code is None:
-            raise Exception('You must set "entity_code" property.')
+            raise Exception('You need to set "entity_code" property.')
 
         self.token = f'Bearer {token}'
         self.version = version
