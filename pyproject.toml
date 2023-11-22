@@ -7,4 +7,15 @@ name = "syapi"
 version = "0.1.8"
 requires-python = ">=3.11"
 description = "library to connect to microservice's ecosystem using API"
+readme = { file = "README.md", content-type = "text/markdown" }
+authors = [
+    { name = "Polyakov Konstantin", email = "shyzik93@mail.ru" }
+]
+license = { file = "LICENSE" }
+maintainers = [
+   { name = "Polyakov Konstantin", email = "shyzik93@mail.ru" }
+]
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
 dependencies = {file = "requirements.txt"}
