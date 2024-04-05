@@ -9,7 +9,7 @@ from syapi import User
 ```python
 user = User()
 # через имя пользователя и пароль
-userdata = user.login(username, password)
+userdata = user.login_by_email(email, password)
 # либо через регистрацию
 userdata = user.registrate(username, password, email)
 # либо через внешний сервис авторизации

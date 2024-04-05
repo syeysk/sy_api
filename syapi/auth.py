@@ -105,7 +105,18 @@ class User:
         return decrypted_data
 
     def login(self, username, password):
+        """Метод не рекомендуем к использованию и в следующих версиях будет удалён"""
         response = self.request('post', '/login/', False, json={'username': username, 'password': password})
+        if response.status_code == 200:
+            decrypt_data = self._decrypt(response)
+            self.token = decrypt_data.pop('token')
+            self.microservice_auth_id = decrypt_data['microservice_auth_id']
+            return decrypt_data
+
+        raise UnknownException(response.status_code)
+
+    def login_by_email(self, email, password):
+        response = self.request('post', '/login_by_email/', False, json={'email': email, 'password': password})
         if response.status_code == 200:
             decrypt_data = self._decrypt(response)
             self.token = decrypt_data.pop('token')
@@ -164,5 +175,12 @@ class User:
         response = self.request('delete', '/user/', True, json={'password': password})
         if response.status_code == 200:
             return
+
+        raise UnknownException(response.status_code)
+
+    def search(self, search_string):
+        response = self.request('post', '/user/search', True, json={'search_string': search_string})
+        if response.status_code == 200:
+            return self._decrypt(response)
 
         raise UnknownException(response.status_code)

@@ -18,7 +18,7 @@ from syapi import Fabric, Note, Resource, User
 
 ## access data
 
-username = 'your_username'
+email = 'your_email'
 user_password = 'your-password1234'
 token_microservice_note = 'your-secret-token'
 token_microservice_resource = 'your-secret-token'
@@ -26,7 +26,7 @@ token_microservice_resource = 'your-secret-token'
 ## init entities
 
 user = User()
-userdata = user.login(username, user_password)  # you can have access only to one user in present time
+userdata = user.login_by_email(email, user_password)  # you can have access only to one user in present time
 note = Note(token_microservice_note)
 fabric = Fabric(token_microservice_resource)
 resource = Resource(token_microservice_resource)
